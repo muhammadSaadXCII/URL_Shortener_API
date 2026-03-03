@@ -9,7 +9,7 @@ let port = process.env.PORT;
 app.use(cors());
 app.use(express.json());
 
-app.get('/shorten', (req, res) => {
+app.post('/shorten', (req, res) => {
     try {
         const { longUrl } = req.body;
 
