@@ -11,14 +11,16 @@ app.use(express.json());
 
 app.get('/shorten', (req, res) => {
     try {
-        const { longURL } = req.body;
+        const { longUrl } = req.body;
 
-        if (!longURL) {
-            return res.status(400).json({ message: "LongURL is Required." })
+        if (!longUrl) {
+            return res.status(400).json({ message: "LongUrl is Required." })
         }
 
-        let shortURL = `http://localhost:5000/${shortid.generate()}`;
-        return res.status(200).json(shortURL);
+        const baseUrl = req.protocol + '://' + req.get('host');
+        let shortUrl = `${baseUrl}/${shortid.generate()}`;
+
+        return res.status(200).json(shortUrl);
     } catch (error) {
         res.status(500).json({ message: "Some error occured.", error })
     }
