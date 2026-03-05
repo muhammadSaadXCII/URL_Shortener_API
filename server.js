@@ -1,30 +1,18 @@
 require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
-const shortid = require('shortid');
+const { connectDB } = require('./config/db');
+const urlRoutes = require('./routes/urlRoutes');
 
 const app = express();
+
+connectDB();
 let port = process.env.PORT;
 
 app.use(cors());
 app.use(express.json());
 
-app.post('/shorten', (req, res) => {
-    try {
-        const { longUrl } = req.body;
-
-        if (!longUrl) {
-            return res.status(400).json({ message: "LongUrl is Required." })
-        }
-
-        const baseUrl = req.protocol + '://' + req.get('host');
-        let shortUrl = `${baseUrl}/${shortid.generate()}`;
-
-        return res.status(200).json(shortUrl);
-    } catch (error) {
-        res.status(500).json({ message: "Some error occured.", error })
-    }
-});
+app.use('/api/url', urlRoutes);
 
 app.listen(port, () => {
     console.log(`Server running on Port ${port}`);
