@@ -32,7 +32,8 @@ exports.getUrlById = async (req, res) => {
         const cacheUrl = await redis.get(id);
 
         if (cacheUrl) {
-            return res.redirect(cacheUrl.originalUrl);
+            const parsedUrl = JSON.parse(cacheUrl);
+            return res.redirect(parsedUrl.originalUrl);
         }
 
         const url = await Url.findOne({ shortId: id });
