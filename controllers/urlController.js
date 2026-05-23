@@ -32,14 +32,14 @@ exports.getUrlById = async (req, res) => {
         const cacheUrl = await redis.get(id);
 
         if (cacheUrl) {
-            return res.status(200).json(JSON.parse(cacheUrl));
+            return res.redirect(cacheUrl.originalUrl);
         }
 
         const url = await Url.findOne({ shortId: id });
-        
+
         if (url) {
             await redis.set(id, JSON.stringify(url), "EX", 60);
-            res.status(200).json(url);
+            res.redirect(url.originalUrl);
         } else {
             res.status(404).json({ message: "No url found" });
         }
